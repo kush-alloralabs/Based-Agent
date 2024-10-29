@@ -1,0 +1,41 @@
+{
+  "asset": "ETH-USD",
+  "timeframe": "1h",
+  "historical_data": [
+    {
+      "timestamp": "2024-03-10T00:00:00Z",
+      "open": 3850.25,
+      "high": 3875.50,
+      "low": 3825.75,
+      "close": 3860.00,
+      "volume": 12500.45
+    },
+    {
+      "timestamp": "2024-03-10T01:00:00Z",
+      "open": 3860.00,
+      "high": 3890.25,
+      "low": 3855.50,
+      "close": 3880.75,
+      "volume": 13200.30
+    }
+  ],
+  "market_indicators": {
+    "moving_averages": {
+      "sma_20": 3855.45,
+      "ema_20": 3857.80
+    },
+    "volatility": {
+      "current": 2.35,
+      "historical": 2.15
+    },
+    "trading_volume": {
+      "average_24h": 285000.50,
+      "current": 292500.75
+    }
+  },
+  "market_conditions": {
+    "trend": "sideways",
+    "volatility_regime": "medium",
+    "liquidity": "high"
+  }
+}
