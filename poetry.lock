@@ -212,6 +212,17 @@ tests = ["cloudpickle", "hypothesis", "mypy (>=1.11.1)", "pympler", "pytest (>=4
 tests-mypy = ["mypy (>=1.11.1)", "pytest-mypy-plugins"]
 
 [[package]]
+name = "backoff"
+version = "2.2.1"
+description = "Function decoration for backoff and retry"
+optional = false
+python-versions = ">=3.7,<4.0"
+files = [
+    {file = "backoff-2.2.1-py3-none-any.whl", hash = "sha256:63579f9a0628e06278f7e47b7d7d5b6ce20dc65c5e96a6f3ca99a6adca0396e8"},
+    {file = "backoff-2.2.1.tar.gz", hash = "sha256:03f829f5bb1923180821643f8753b0502c3b682293992485b0eef2807afa5cba"},
+]
+
+[[package]]
 name = "bip-utils"
 version = "2.9.3"
 description = "Generation of mnemonics, seeds, private/public keys and addresses for different types of cryptocurrencies"
@@ -2587,4 +2598,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.10.0,<3.12"
-content-hash = "448edf3ce6469d3c864c33a23fe561597b5ce59f0241772ee33b451f57f45586"
+content-hash = "d7c8d8b70ef99ecb0fe66b61032c17d9b52b582fe52de4c747cb56729ff0be1d"

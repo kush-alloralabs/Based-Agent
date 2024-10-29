@@ -12,7 +12,7 @@ from cdp.errors import ApiError, UnsupportedAssetError
 
 # Configure the CDP SDK
 # This loads the API key from a JSON file. Make sure this file exists and contains valid credentials.
-Cdp.configure_from_json("./Based-Agent/cdp_api_key.json")
+Cdp.configure_from_json("./cdp_api_key.json")
 
 # Create a new wallet on the Base Sepolia testnet
 # You could make this a function for the agent to create a wallet on any network
