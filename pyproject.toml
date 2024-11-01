@@ -11,6 +11,7 @@ pytest = "^8.3.3"
 cdp-sdk = "^0.0.8"
 load-dotenv = "^0.1.0"
 backoff = "^2.2.1"
+python-telegram-bot = "^21.6"
 
 [tool.pyright]
 # https://github.com/microsoft/pyright/blob/main/docs/configuration.md

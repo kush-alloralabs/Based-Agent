@@ -2076,6 +2076,31 @@ files = [
 cli = ["click (>=5.0)"]
 
 [[package]]
+name = "python-telegram-bot"
+version = "21.6"
+description = "We have made you a wrapper you can't refuse"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "python_telegram_bot-21.6-py3-none-any.whl", hash = "sha256:f2d6431bf154a53f40cdfc6c1d492a66102c0e4938709f6d8202bcd951c840cb"},
+    {file = "python_telegram_bot-21.6.tar.gz", hash = "sha256:8b2b37836c3ff9c2924e990474a1c4731df21b1668acebff5099f475666426c6"},
+]
+
+[package.dependencies]
+httpx = ">=0.27,<1.0"
+
+[package.extras]
+all = ["aiolimiter (>=1.1.0,<1.2.0)", "apscheduler (>=3.10.4,<3.11.0)", "cachetools (>=5.3.3,<5.6.0)", "cffi (>=1.17.0rc1)", "cryptography (>=39.0.1)", "httpx[http2]", "httpx[socks]", "pytz (>=2018.6)", "tornado (>=6.4,<7.0)"]
+callback-data = ["cachetools (>=5.3.3,<5.6.0)"]
+ext = ["aiolimiter (>=1.1.0,<1.2.0)", "apscheduler (>=3.10.4,<3.11.0)", "cachetools (>=5.3.3,<5.6.0)", "pytz (>=2018.6)", "tornado (>=6.4,<7.0)"]
+http2 = ["httpx[http2]"]
+job-queue = ["apscheduler (>=3.10.4,<3.11.0)", "pytz (>=2018.6)"]
+passport = ["cffi (>=1.17.0rc1)", "cryptography (>=39.0.1)"]
+rate-limiter = ["aiolimiter (>=1.1.0,<1.2.0)"]
+socks = ["httpx[socks]"]
+webhooks = ["tornado (>=6.4,<7.0)"]
+
+[[package]]
 name = "pyunormalize"
 version = "16.0.0"
 description = "Unicode normalization forms (NFC, NFKC, NFD, NFKD). A library independent of the Python core Unicode database."
@@ -2598,4 +2623,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.10.0,<3.12"
-content-hash = "d7c8d8b70ef99ecb0fe66b61032c17d9b52b582fe52de4c747cb56729ff0be1d"
+content-hash = "a62c89c3a80ea2602ad9967d646d2537585b4f1e9dd896cd28cec1be98368bfc"

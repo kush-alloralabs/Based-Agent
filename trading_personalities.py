@@ -1,37 +1,38 @@
+# Auto-generated trading personalities
 TRADING_PERSONALITIES = {
-    "Aggressive_Growth": {
-        "name": "Aggressive Growth Trader",
-        "description": "Seeks high-growth opportunities with higher risk tolerance. Focuses on momentum and breakout patterns.",
+    "Eco_Warrior_Trader": {
+        "name": "Eco Warrior Trader",
+        "description": "Invests in eco-friendly companies and sustainability-focused assets",
+        "risk_tolerance": "medium",
+        "time_horizon": "medium-long",
+        "preferred_indicators": ["esg_score", "carbon_footprint", "green_revenue"]
+    },
+    "Techno_Futurist": {
+        "name": "Techno Futurist",
+        "description": "Focuses on innovative technologies and futuristic industries",
+        "risk_tolerance": "medium-high",
+        "time_horizon": "medium",
+        "preferred_indicators": ["relative_strength_index", "moving_average_convergence_divergence", "beta"]
+    },
+    "Quantitative_Artisan": {
+        "name": "Quantitative Artisan",
+        "description": "Blends algorithmic efficiency with artisan markets",
         "risk_tolerance": "high",
         "time_horizon": "short",
-        "preferred_indicators": ["momentum", "volume", "breakouts"]
+        "preferred_indicators": ["bollinger_bands", "stochastic_oscillator", "fibonacci_retracement"]
     },
-    "Conservative_Value": {
-        "name": "Conservative Value Trader",
-        "description": "Focuses on stable assets with strong fundamentals. Prefers lower risk and longer holding periods.",
+    "Zen_Balancer": {
+        "name": "Zen Balancer",
+        "description": "Seeks harmony in portfolio diversification and market cycles",
         "risk_tolerance": "low",
         "time_horizon": "long",
-        "preferred_indicators": ["moving_averages", "rsi", "fundamentals"]
+        "preferred_indicators": ["dividend_yield", "sharpe_ratio", "asset_allocation"]
     },
-    "Technical_Swing": {
-        "name": "Technical Swing Trader",
-        "description": "Uses technical analysis for medium-term trades. Balances risk and reward.",
+    "Bio_Dynamic_Allocator": {
+        "name": "Bio-Dynamic Allocator",
+        "description": "Integrates ecological cycles into asset allocation strategies",
         "risk_tolerance": "medium",
-        "time_horizon": "medium",
-        "preferred_indicators": ["fibonacci", "support_resistance", "patterns"]
-    },
-    "Mean_Reversion": {
-        "name": "Mean Reversion Trader",
-        "description": "Capitalizes on price deviations from historical averages.",
-        "risk_tolerance": "medium",
-        "time_horizon": "short",
-        "preferred_indicators": ["bollinger_bands", "mean_reversion", "volatility"]
-    },
-    "Trend_Follower": {
-        "name": "Trend Following Trader",
-        "description": "Follows established market trends with systematic approach.",
-        "risk_tolerance": "medium-high",
         "time_horizon": "medium-long",
-        "preferred_indicators": ["trends", "moving_averages", "adx"]
+        "preferred_indicators": ["sustainable_growth_rate", "cyclical_trends", "organic_growth"]
     }
 }

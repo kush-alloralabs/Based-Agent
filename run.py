@@ -61,7 +61,7 @@ def run_openai_conversation_loop(agent):
     while True:
         # Generate OpenAI response
         openai_response = openai_client.chat.completions.create(
-            model="gpt-3.5-turbo",
+            model="gpt-4o",
             messages=openai_messages
         )
         

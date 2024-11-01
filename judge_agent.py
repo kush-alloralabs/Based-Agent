@@ -6,7 +6,6 @@ import time
 import os
 from dotenv import load_dotenv
 from pathlib import Path
-
 # Configure logging
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -34,13 +33,27 @@ def evaluate_strategy(strategy_data):
         dict: Evaluation results
     """
     try:
+        # Example logic to dynamically calculate scores
+        process_quality = calculate_process_quality(strategy_data)
+        risk_management = calculate_risk_management(strategy_data)
+        market_adaptation = calculate_market_adaptation(strategy_data)
+        
+        # Calculate overall score as a weighted sum of individual scores
+        overall_score = (
+            process_quality * 0.25 +
+            risk_management * 0.25 +
+            market_adaptation * 0.20 +
+            calculate_implementation_correctness(strategy_data) * 0.15 +
+            calculate_strategy_robustness(strategy_data) * 0.15
+        )
+        
         evaluation = {
             'strategy_name': strategy_data.get('name', 'Unnamed Strategy'),
-            'process_quality': 80,
-            'risk_management': 75,
-            'market_adaptation': 70,
-            'overall_score': 75,
-            'evaluation_text': "Test evaluation",
+            'process_quality': process_quality,
+            'risk_management': risk_management,
+            'market_adaptation': market_adaptation,
+            'overall_score': overall_score,
+            'evaluation_text': generate_evaluation_text(strategy_data),
             'timestamp': time.time()
         }
         evaluation_memory.append(evaluation)
@@ -53,6 +66,34 @@ def evaluate_strategy(strategy_data):
             'overall_score': 0,
             'timestamp': time.time()
         }
+
+def get_strategy_history(self):
+    """Returns the history of developed strategies"""
+    return strategy_history
+
+def calculate_process_quality(strategy_data):
+    # Implement logic to evaluate process quality
+    return 80  # Example static value, replace with dynamic logic
+
+def calculate_risk_management(strategy_data):
+    # Implement logic to evaluate risk management
+    return 75  # Example static value, replace with dynamic logic
+
+def calculate_market_adaptation(strategy_data):
+    # Implement logic to evaluate market adaptation
+    return 70  # Example static value, replace with dynamic logic
+
+def calculate_implementation_correctness(strategy_data):
+    # Implement logic to evaluate implementation correctness
+    return 65  # Example static value, replace with dynamic logic
+
+def calculate_strategy_robustness(strategy_data):
+    # Implement logic to evaluate strategy robustness
+    return 60  # Example static value, replace with dynamic logic
+
+def generate_evaluation_text(strategy_data):
+    # Generate a detailed evaluation text based on the strategy data
+    return "Detailed evaluation based on strategy analysis."
 
 class JudgeAgent(Agent):
     def __init__(self):
@@ -79,6 +120,13 @@ class JudgeAgent(Agent):
             instructions=instructions,
             functions=[
                 evaluate_strategy,
+                get_strategy_history,
+                calculate_process_quality,
+                calculate_risk_management,
+                calculate_market_adaptation,
+                calculate_implementation_correctness,
+                calculate_strategy_robustness,
+                generate_evaluation_text
             ]
         )
         logger.debug("Completed JudgeAgent initialization")
