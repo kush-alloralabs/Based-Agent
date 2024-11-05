@@ -329,14 +329,17 @@ async def start_telegram_agents(tokens: str, group_id: str, timeout: int = 120):
     try:
         console.print("\n[bold blue]🤖 Starting Trading Agents on Telegram...[/bold blue]")
         
+        # Ensure group_id is properly formatted
+        group_id = str(group_id)
+        if not group_id.startswith('-'):
+            group_id = f"-{group_id}"
+            
+        console.print(f"[yellow]Debug: Using group ID: {group_id}[/yellow]")
+        
         # Parse tokens
         bot_tokens = [token.strip() for token in tokens.split(',')]
         
-        # Validate we have enough tokens for personalities
-        if len(bot_tokens) < len(TRADING_PERSONALITIES):
-            console.print(f"[yellow]Warning: Only {len(bot_tokens)} tokens provided for {len(TRADING_PERSONALITIES)} personalities[/yellow]")
-        
-        # Create agents with their own bot tokens
+        # Create agents
         for token, personality in zip(bot_tokens, TRADING_PERSONALITIES.values()):
             agent = TelegramCommunicationAgent(
                 name=personality['name'],
@@ -345,10 +348,19 @@ async def start_telegram_agents(tokens: str, group_id: str, timeout: int = 120):
                 personality=personality
             )
             agents[personality['name']] = agent
+            
+        # Register agents with each other
+        for name, agent in agents.items():
+            for other_name, other_agent in agents.items():
+                if name != other_name:
+                    await agent.register_agent(other_name, other_agent)
+                    
+        # Initialize all agents
+        for agent in agents.values():
             await agent.setup_telegram()
             await asyncio.sleep(2)  # Delay between agent initialization
-            console.print(f"[green]✓ Created agent: {personality['name']}[/green]")
-
+            console.print(f"[green]✓ Created agent: {agent.name}[/green]")
+            
         console.print("\n[bold green]🎉 All agents are active and listening![/bold green]")
         console.print("\nAvailable commands:")
         console.print("  /start  - Get started")

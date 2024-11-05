@@ -10,7 +10,7 @@ from pathlib import Path
 import json
 from swarm import Agent
 from cdp import *
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 import os
 from openai import OpenAI
 from decimal import Decimal
@@ -18,47 +18,8 @@ from typing import Union
 from web3 import Web3
 from web3.exceptions import ContractLogicError
 from cdp.errors import ApiError, UnsupportedAssetError
-
-# Configure the CDP SDK
-# This loads the API key from a JSON file. Make sure this file exists and contains valid credentials.
-Cdp.configure_from_json("./cdp_api_key.json")
-
-# Create a new wallet on the Base Sepolia testnet
-# You could make this a function for the agent to create a wallet on any network
-# If you want to use Base Mainnet, change Wallet.create() to Wallet.create(network_id="base-mainnet")
-# see https://docs.cdp.coinbase.com/mpc-wallet/docs/wallets for more information
-agent_wallet = Wallet.create()
-
-# NOTE: the wallet is not currently persisted, meaning that it will be deleted after the agent is stopped. To persist the wallet, see https://docs.cdp.coinbase.com/mpc-wallet/docs/wallets#developer-managed-wallets 
-# Here's an example of how to persist the wallet:
-# WARNING: This is for development only - implement secure storage in production!
-
-# # Export wallet data (contains seed and wallet ID)
-# wallet_data = agent_wallet.export_data()
-# wallet_dict = wallet_data.to_dict()
-
-# # Example of saving to encrypted local file
-# file_path = "wallet_seed.json" 
-# agent_wallet.save_seed(file_path, encrypt=True)
-# print(f"Seed for wallet {agent_wallet.id} saved to {file_path}")
-
-# # Example of loading a saved wallet:
-# # 1. Fetch the wallet by ID
-# fetched_wallet = Wallet.fetch(wallet_id)
-# # 2. Load the saved seed
-# fetched_wallet.load_seed("wallet_seed.json")
-
-# Example of importing previously exported wallet data:
-# imported_wallet = Wallet.import_data(wallet_dict)
-
-
-
-
-# Request funds from the faucet (only works on testnet)
-faucet = agent_wallet.faucet()
-print(f"Faucet transaction: {faucet}")
-print(f"Agent wallet address: {agent_wallet.default_address.address_id}")
-
+from pydantic import BaseModel, Field
+from cdp import Wallet
 
 # Configure logging
 logging.basicConfig(level=logging.DEBUG)
@@ -74,6 +35,17 @@ if not os.getenv('OPENAI_API_KEY'):
     raise ValueError("OPENAI_API_KEY not found in environment variables")
 
 client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
+
+# Initialize CDP wallet only if needed
+try:
+    agent_wallet = Wallet()
+    faucet = agent_wallet.faucet()
+    logger.info(f"CDP wallet initialized: {agent_wallet.default_address.address_id}")
+except Exception as e:
+    logger.warning(f"CDP wallet initialization failed: {e}. Continuing without CDP functionality.")
+    agent_wallet = None
+    faucet = None
+
 # Global variables
 strategy_history = []
 
@@ -462,53 +434,33 @@ def register_basename(basename: str, amount: float = 0.002):
         return f"Unexpected error registering basename: {str(e)}"
 
 
-class TradingStrategyAgent(Agent):
-    def __init__(self, name: str, model: str = "gpt-4o", personality: dict = None):
-        system_context = personality.get('context', '')
-        
-        instructions = f"""
-        You are a trading strategy agent that develops and executes trading strategies
-        on Base. Your trading personality is:
-        
-        Name: {personality.get('name', 'Generic Trader')}
-        Description: {personality.get('description', 'A balanced trading approach')}
-        Risk Tolerance: {personality.get('risk_tolerance', 'medium')}
-        Time Horizon: {personality.get('time_horizon', 'medium')}
-        Preferred Indicators: {', '.join(personality.get('preferred_indicators', ['general']))}
-        
-        Additional Context:
-        {system_context}
-        
-        When analyzing market data:
-        1. Look for clear patterns and trends
-        2. Consider risk management parameters aligned with your risk tolerance
-        3. Propose specific entry and exit points
-        4. Document your reasoning
-        5. Stay true to your trading personality and preferred approach
+class TradingStrategyAgent:
+    def __init__(self, name: str, model: str = "gpt-4", personality: dict = None):
+        self._name = name
+        self._model = model
+        self._personality = personality or {}
+        self._trajectory = []
+        self._wallet = agent_wallet  # Now agent_wallet is defined
 
-        instructions="You are a helpful agent that can interact onchain on the Base Layer 2 using the Coinbase Developer Platform SDK. You can create tokens, transfer assets, generate art, deploy NFTs, mint NFTs, register basenames, and swap assets (on mainnet only). If you ever need to know your address, it is {agent_wallet.default_address.address_id}. If you ever need funds, you can request them from the faucet. You can also deploy your own ERC-20 tokens, NFTs, and interact with them. If someone asks you to do something you can't do, you can say so, and encourage them to implement it themselves using the CDP SDK, recommend they go to docs.cdp.coinbase.com for more informaton. You can also offer to help them implement it by writing the function and telling them to add it to the trading_strategy_agent.py file and within your list of callable functions.",
-        """
-        
-        super().__init__(
-            name=name,
-            model=model,
-            instructions=instructions,
-            functions=[
-                develop_trading_strategy,
-                get_completion,
-                create_token, 
-                transfer_asset, 
-                get_balance, 
-                request_eth_from_faucet, 
-                #generate_art,  # Uncomment this line if you have configured the OpenAI API
-                deploy_nft, 
-                mint_nft,
-                swap_assets,
-                register_basename
-            ]
-        )
-        
-        logger.info(f"TradingStrategyAgent initialized with model: {model} and personality: {name}")
+    @property
+    def name(self) -> str:
+        return self._name
+
+    @property
+    def model(self) -> str:
+        return self._model
+
+    @property
+    def personality(self) -> dict:
+        return self._personality
+
+    @property
+    def trajectory(self) -> list:
+        return self._trajectory
+
+    @property
+    def wallet(self):
+        return self._wallet
 
     async def develop_strategy(self, market_data, personality, model):
         """Wrapper method to develop a trading strategy"""
